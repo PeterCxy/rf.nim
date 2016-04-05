@@ -1,6 +1,5 @@
 import rx/core/observable, rx/core/subscriber
 import rx/operators/map, rx/operators/flatMap
-export observable, subscriber, map
 
 when isMainModule:
   import future, asyncdispatch, asyncfile, strutils, httpclient
