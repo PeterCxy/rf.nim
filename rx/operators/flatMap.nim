@@ -36,3 +36,8 @@ proc flatMap*[T, I](observable: Observable[T], f: (T) -> Observable[I]): Observa
       , error = proc(e: ref Exception) = s.onError(e)
     )
   )
+
+# Spread emitted sequences
+# Shorthand of a specific flatMap operation
+proc spread*[T](observable: Observable[seq[T]]): Observable[T] =
+  return observable.flatMap((it: seq[T]) => ~it)

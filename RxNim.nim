@@ -27,7 +27,8 @@ when isMainModule:
       let file2 = openAsync(it);
       ~file2.readAll()
     ))
-    .flatMap((it: string) => ~it.splitLines)
+    .map((it: string) => it.splitLines)
+    .spread()
     .map((it: string) => "[" & it & "]")
     .subscribe((x: string) => (
       echo x
