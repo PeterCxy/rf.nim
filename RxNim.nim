@@ -25,7 +25,7 @@ when isMainModule:
   just(@["RxNim.nimble", "RxNim.nim"])
     .flatMap((it: string) => (
       let file2 = openAsync(it);
-      ~file2.readAll()
+      just(file2.readAll()).then(() => file2.close) # Do not forget to close it!
     ))
     .map((it: string) => it.splitLines)
     .spread()
