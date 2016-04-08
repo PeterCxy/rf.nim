@@ -8,8 +8,8 @@ proc filter*[T](observable: Observable[T], f: (T) -> bool): Observable[T] =
       next = proc(it: T) =
         if f(it):
           s.onNext(it)
-      , error = proc(e: ref Exception) = s.onError(e)
-      , complete = proc() = s.onComplete()
+      , error = s.onError
+      , complete = s.onComplete
     )
   )
 
