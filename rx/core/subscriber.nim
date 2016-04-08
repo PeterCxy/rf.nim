@@ -13,6 +13,10 @@ proc newSubscriber*[T](next: proc(x: T), complete: proc(), error: proc(e: ref Ex
       next(x)
     except:
       res.onError(getCurrentException())
-  res.onComplete = complete
+  res.onComplete = proc() =
+    try:
+      complete()
+    except:
+      res.onError(getCurrentException())
   res.onError = error
   return res
