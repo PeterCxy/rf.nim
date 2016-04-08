@@ -16,11 +16,7 @@ proc flatMap*[T, I](observable: Observable[T], f: (T) -> Observable[I]): Observa
     observable.subscribe(
       next = proc(x: T) =
         count += 1
-        var o2: Observable[I]
-        try:
-          o2 = f(x)
-        except:
-          s.onError(getCurrentException())
+        let o2 = f(x)
 
         o2.subscribe(
           next = proc(y: I) =
@@ -28,12 +24,12 @@ proc flatMap*[T, I](observable: Observable[T], f: (T) -> Observable[I]): Observa
           , complete = proc() =
             completeCount += 1
             checkComplete()
-          , error = proc(e: ref Exception) = s.onError(e)
+          , error = s.onError
         )
       , complete = proc() =
         parentCompleted = true
         checkComplete()
-      , error = proc(e: ref Exception) = s.onError(e)
+      , error = s.onError
     )
   )
 

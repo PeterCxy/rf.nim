@@ -7,6 +7,12 @@ type
     onComplete*: proc()
 
 proc newSubscriber*[T](next: proc(x: T), complete: proc(), error: proc(e: ref Exception)): Subscriber[T] =
-  result.onNext = next
-  result.onComplete = complete
-  result.onError = error
+  var res: Subscriber[T]
+  res.onNext = proc(x: T) =
+    try:
+      next(x)
+    except:
+      res.onError(getCurrentException())
+  res.onComplete = complete
+  res.onError = error
+  return res

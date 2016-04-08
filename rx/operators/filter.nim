@@ -6,11 +6,8 @@ proc filter*[T](observable: Observable[T], f: (T) -> bool): Observable[T] =
   result = newObservable[T](proc(s: Subscriber[T]) =
     observable.subscribe(
       next = proc(it: T) =
-        try:
-          if f(it):
-            s.onNext(it)
-        except:
-          s.onError(getCurrentException())
+        if f(it):
+          s.onNext(it)
       , error = proc(e: ref Exception) = s.onError(e)
       , complete = proc() = s.onComplete()
     )
