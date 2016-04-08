@@ -1,6 +1,6 @@
 import rx/core/observable, rx/core/subscriber
 import rx/operators/map, rx/operators/flatMap, rx/operators/filter,
-  rx/operators/doOnCompleted
+  rx/operators/doOnCompleted, rx/operators/reduce
 
 when isMainModule:
   import future, asyncdispatch, asyncfile, strutils, httpclient
@@ -8,7 +8,12 @@ when isMainModule:
   just(0..10)
     .where((x: int) => x > 5)
     .map((x: int) => $x & " testmap")
-    .subscribe((x: string) => echo x)
+    .toArray()
+    .subscribe((x: seq[string]) => echo x)
+
+  just(1..5)
+    .reduce((x: int, y: int) => x + y)
+    .subscribe((x: int) => echo x)
 
   just(@["http://example.com", "http://nim-lang.org"])
     .flatMap((url: string) =>
