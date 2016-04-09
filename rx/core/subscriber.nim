@@ -1,5 +1,3 @@
-import rx/core/observable
-
 type
   Subscriber*[T] = object of RootObj
     onNext*: proc(x: T)
@@ -20,3 +18,4 @@ proc newSubscriber*[T](next: proc(x: T), complete: proc(), error: proc(e: ref Ex
       res.onError(getCurrentException())
   res.onError = error
   return res
+

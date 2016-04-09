@@ -1,6 +1,7 @@
 import rx/core/observable, rx/core/subscriber
 import rx/operators/map, rx/operators/flatMap, rx/operators/filter,
-  rx/operators/doOnCompleted, rx/operators/reduce, rx/operators/scan
+  rx/operators/doOnCompleted, rx/operators/reduce, rx/operators/scan,
+  rx/operators/groupBy
 
 when isMainModule:
   import future, asyncdispatch, asyncfile, strutils, httpclient
@@ -14,6 +15,11 @@ when isMainModule:
   just(1..5)
     .reduce((x: int, y: int) => x + y)
     .subscribe((x: int) => echo x)
+
+  just(1..20)
+    .groupBy((x: int) => x mod 5)
+    .flatMap((it: Observable[int]) => it.toArray())
+    .subscribe((it: seq[int]) => echo it)
 
   just(1..5)
     .scan((x: seq[int], y: int) => (

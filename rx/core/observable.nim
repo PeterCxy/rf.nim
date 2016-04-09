@@ -45,3 +45,37 @@ proc just*[T](fut: Future[T]): Observable[T] =
 # Shorthands for `just`
 template `~`*[T](item: seq[T] or Slice[T] or Future[T]): expr {.immediate.} =
   just(item)
+
+# Buffered Proxy of subscriber
+proc newSubscriberProxy*[T](observable: var Observable[T]): Subscriber[T] =
+  var orig: Subscriber[T]
+  var subscribed, completed: bool
+  var error: ref Exception = nil
+  var buf: seq[T] = @[]
+  result.onNext = proc(x: T) =
+    if not subscribed:
+      buf.add(x)
+    else:
+      orig.onNext(x)
+  result.onError = proc(e: ref Exception) =
+    if not subscribed:
+      error = e
+    else:
+      orig.onError(e)
+  result.onComplete = proc() =
+    if not subscribed:
+      completed = true
+    else:
+      orig.onComplete()
+  observable.onSubscribe = proc(s: Subscriber[T]) =
+    orig = s
+    subscribed = true
+
+    if error != nil:
+      s.onError(error)
+
+    if completed:
+      s.onComplete()
+
+    for i in buf:
+      s.onNext(i)
