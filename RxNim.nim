@@ -1,6 +1,6 @@
 import rx/core/observable, rx/core/subscriber
 import rx/operators/map, rx/operators/flatMap, rx/operators/filter,
-  rx/operators/doOnCompleted, rx/operators/reduce
+  rx/operators/doOnCompleted, rx/operators/reduce, rx/operators/scan
 
 when isMainModule:
   import future, asyncdispatch, asyncfile, strutils, httpclient
@@ -14,6 +14,14 @@ when isMainModule:
   just(1..5)
     .reduce((x: int, y: int) => x + y)
     .subscribe((x: int) => echo x)
+
+  just(1..5)
+    .scan((x: seq[int], y: int) => (
+      var s = if x == nil: @[] else: x;
+      s.add(y);
+      s
+    ))
+    .subscribe((x: seq[int]) => echo x)
 
   just(@["http://example.com", "http://nim-lang.org"])
     .flatMap((url: string) =>
