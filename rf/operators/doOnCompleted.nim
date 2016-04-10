@@ -1,5 +1,5 @@
 import future
-import rx/core/observable, rx/core/subscriber
+import rf/core/observable, rf/core/subscriber
 
 # The doOnCompleted operator registers an Action which will be called if the resulting Observable terminates normally, calling onCompleted.
 proc doOnCompleted*[T](observable: Observable[T], f: () -> void): Observable[T] =

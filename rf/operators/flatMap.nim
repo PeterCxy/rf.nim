@@ -1,5 +1,5 @@
 import future, asyncdispatch
-import rx/core/observable, rx/core/subscriber
+import rf/core/observable, rf/core/subscriber
 
 # flatMap-related operators
 # transform the items emitted by an Observable into Observables, then flatten the emissions from those into a single Observable

@@ -1,6 +1,6 @@
 import future, asyncdispatch
 
-import rx/core/subscriber
+import rf/core/subscriber
 
 type
   Observable*[T] = object of RootObj

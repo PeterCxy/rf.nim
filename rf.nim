@@ -1,7 +1,7 @@
-import rx/core/observable, rx/core/subscriber
-import rx/operators/map, rx/operators/flatMap, rx/operators/filter,
-  rx/operators/doOnCompleted, rx/operators/reduce, rx/operators/scan,
-  rx/operators/groupBy
+import rf/core/observable, rf/core/subscriber
+import rf/operators/map, rf/operators/flatMap, rf/operators/filter,
+  rf/operators/doOnCompleted, rf/operators/reduce, rf/operators/scan,
+  rf/operators/groupBy
 
 when isMainModule:
   import future, asyncdispatch, asyncfile, strutils, httpclient
@@ -35,7 +35,7 @@ when isMainModule:
     .subscribe((resp: Response) => echo resp.body,
       () => echo "complete")
   
-  var file1 = openAsync("RxNim.nim", fmRead)
+  var file1 = openAsync("rf.nim", fmRead)
 
   just(file1.readAll())
     .subscribe((x: string) => (
@@ -43,7 +43,7 @@ when isMainModule:
       echo x
     ))
 
-  just(@["RxNim.nimble", "RxNim.nim"])
+  just(@["rf.nimble", "rf.nim"])
     .flatMap((it: string) => (
       let file2 = openAsync(it);
       just(file2.readAll()).doOnCompleted(() => file2.close) # Do not forget to close it!

@@ -1,5 +1,5 @@
 import future, asyncdispatch
-import rx/core/observable, rx/core/subscriber
+import rf/core/observable, rf/core/subscriber
 
 # Map operators
 

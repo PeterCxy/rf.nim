@@ -1,5 +1,5 @@
 import future
-import rx/core/observable, rx/core/subscriber
+import rf/core/observable, rf/core/subscriber
 
 # divide an Observable into a set of Observables that each emit a different subset of items from the original Observable
 proc groupBy*[T, K, I](observable: Observable[T], keySelector: (T) -> K,

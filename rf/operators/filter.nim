@@ -1,5 +1,5 @@
 import future
-import rx/core/observable, rx/core/subscriber
+import rf/core/observable, rf/core/subscriber
 
 # emit only those items from an Observable that pass a predicate test
 proc filter*[T](observable: Observable[T], f: (T) -> bool): Observable[T] =

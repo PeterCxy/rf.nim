@@ -1,5 +1,5 @@
 import future
-import rx/core/observable, rx/core/subscriber
+import rf/core/observable, rf/core/subscriber
 
 # apply a function to each item emitted by an Observable, sequentially, and emit each successive value
 proc scan*[T, I](observable: Observable[T], f: (I, T) -> I): Observable[I] =
