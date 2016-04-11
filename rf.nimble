@@ -12,4 +12,5 @@ requires "nim >= 0.13.0"
 task debug, "debug rf.nim":
   --run
   setCommand "c", "rf"
+  switch "threads", "on"
   switch "o", "rf.debug"

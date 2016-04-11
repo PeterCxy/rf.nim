@@ -3,6 +3,9 @@ import rf/operators/map, rf/operators/flatMap, rf/operators/filter,
   rf/operators/doOnCompleted, rf/operators/reduce, rf/operators/scan,
   rf/operators/groupBy
 
+when compileOption("threads"):
+  import asyncext
+
 when isMainModule:
   import future, asyncdispatch, asyncfile, strutils, httpclient
 
@@ -55,4 +58,25 @@ when isMainModule:
       echo x
     ), () => echo "complete")
 
-  runForever() # Necessary for async procedures
+  when compileOption("threads"):
+    import os, threadpool
+
+    proc someHeavyTask(x: int): int =
+      echo "started " & $x
+      for i in 0..10000000:
+        discard # Simulate a long task
+      echo "finished " & $x
+      return x + 1
+
+    setMinPoolSize(12)
+
+    just(0..10)
+      .flatMap((x: int) => (
+        echo "mapping " & $x;
+        ~spawnAsync someHeavyTask(x)
+      ))
+      .subscribe((x: int) => echo x)
+
+    loopForever() # Call this instead if using spawnAsync
+  else:
+    runForever() # Necessary for async procedures
