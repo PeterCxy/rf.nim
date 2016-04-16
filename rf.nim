@@ -1,7 +1,7 @@
 import rf/core/observable, rf/core/subscriber
 import rf/operators/map, rf/operators/flatMap, rf/operators/filter,
   rf/operators/doOnCompleted, rf/operators/reduce, rf/operators/scan,
-  rf/operators/groupBy
+  rf/operators/groupBy, rf/operators/distinkt
 
 when compileOption("threads"):
   import asyncext
@@ -31,6 +31,11 @@ when isMainModule:
       s
     ))
     .subscribe((x: seq[int]) => echo x)
+
+  just(@[1, 1, 1, 2, 3, 2, 4, 5, 5, 6, 3, 7])
+    .distinkt()
+    .toArray()
+    .subscribe((it: seq[int]) => echo it)
 
   just(@["http://example.com", "http://nim-lang.org"])
     .flatMap((url: string) =>
