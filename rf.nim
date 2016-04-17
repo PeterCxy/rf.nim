@@ -37,6 +37,11 @@ when isMainModule:
     .toArray()
     .subscribe((it: seq[int]) => echo it)
 
+  just(@[1, 1, 2, 1, 1, 2])
+    .distinktUntilChanged()
+    .toArray()
+    .subscribe((it: seq[int]) => echo it)
+
   just(@["http://example.com", "http://nim-lang.org"])
     .flatMap((url: string) =>
       ~newAsyncHttpClient().request(url))

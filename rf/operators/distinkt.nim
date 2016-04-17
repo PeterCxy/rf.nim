@@ -21,3 +21,24 @@ proc distinkt*[T, K](observable: Observable[T], keySelector: (T) -> K): Observab
 
 proc distinkt*[T](observable: Observable[T]): Observable[T] =
   return observable.distinkt((it: T) => it)
+
+# Only compare emitted items from the source Observable against their immediate predecessors in order to determine whether or not they are distinct.
+proc distinktUntilChanged*[T, K](observable: Observable[T], keySelector: (T) -> K): Observable[T] =
+  result = newObservable[T](proc(s: Subscriber[T]) =
+    var first = true
+    var last: K
+
+    observable.subscribe(
+      error = s.onError, complete = s.onComplete,
+      next = proc(it: T) =
+        let k = keySelector(it)
+        if first or k != last:
+          first = false
+          last = k
+          s.onNext(it)
+    )
+  )
+
+proc distinktUntilChanged*[T](observable: Observable[T]): Observable[T] =
+  observable.distinktUntilChanged((it: T) => it)
+
